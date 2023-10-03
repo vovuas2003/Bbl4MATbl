@@ -25,8 +25,8 @@ def norm_v(x):
 def solve(A, f):
     lambd, _ = np.linalg.eig(A)
     t = 2 / (max(lambd) + min(lambd))
-    #prev = np.asarray([A[i][i]/f[i] for i in range(len(f))])
-    prev = np.zeros(len(f))
+    prev = np.asarray([f[i]/A[i][i] for i in range(len(f))])
+    #prev = np.zeros(len(f))
     x = (np.eye(len(f)) - t * A).dot(prev) + t * f
     while(norm_v(x - prev) > 10**-6):
         prev = x
