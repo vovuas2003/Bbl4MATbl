@@ -24,10 +24,10 @@ def main():
 def global_solve(A, f, tay, eps):
     zoom = False
     textx = False
-    printx = True
+    printx = False
     textn = False
-    printn = True
-    printxr = True
+    printn = False
+    printxr = False
     xc = 4.2
     yc = 0.37
     xn = 2.5
@@ -123,6 +123,7 @@ def solve(A, f, tay, eps):
     return x, y
 
 def Gersh_Kr(A):
+    #A = np.asarray([[2.2,1,0.5,2],[1,1.3,2,1],[0.5,2,0.5,1.6],[2,1,1.6,2]])
     n = len(A)
     S = []
     r = 0
@@ -137,6 +138,23 @@ def Gersh_Kr(A):
     for i in range(n):
         print("lambda " + str(i + 1) + " is in [" + str(S[i][0]) + "; " + str(S[i][1]) + "]")
     print()
+    #c = np.zeros(n)
+    #c[0] = 1
+    #c = np.ones(n)
+    c = np.asarray([n * (i + 1) for i in range(n)])
+    B = np.zeros((n, n))
+    for i in range(n):
+        B[i, n - 1] = c[i]
+    for i in range(n - 2, -1, -1):
+        c = np.dot(A, c)
+        for j in range(n):
+            B[j, i] = c[j]
+    f = np.dot(A, c)
+    l, _ = np.linalg.eig(A)
+    print(sorted(l))
+    c = np.linalg.solve(B, f)
+    c = [-1] + [x for x in c]
+    print(sorted(np.roots(c)))
     return 1
 
 def by_numpy(A):
