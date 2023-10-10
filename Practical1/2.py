@@ -132,7 +132,11 @@ def Gersh_Kr(A):
             if i == j:
                 continue
             r += abs(A[i, j])
-        S.append([A[i, i], r])
+        S.append([A[i, i] - r, A[i, i] + r])
+    print("Оценка собственных значений с помощью кругов Гершгорина:")
+    for i in range(n):
+        print("lambda " + str(i + 1) + " is in [" + str(S[i][0]) + "; " + str(S[i][1]) + "]")
+    print()
     return 1
 
 def by_numpy(A):
