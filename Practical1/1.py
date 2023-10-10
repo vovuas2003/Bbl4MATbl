@@ -42,10 +42,10 @@ def solve(L, f):
     n = len(L)
     v = np.zeros(n)
     for i in range(n):
-        v[i] = (f[i] - sum([L[k, i] * v[k] for k in range(i)])) / L[i, i]
+        v[i] = (f[i] - sum([L[i, k] * v[k] for k in range(i)])) / L[i, i]
     u = np.zeros(n)
     for i in range(n - 1, -1, -1):
-        u[i] = (v[i] - sum([L[i, j] * u[j] for j in range(i, n)])) / L[i, i]
+        u[i] = (v[i] - sum([L[j, i] * u[j] for j in range(i, n)])) / L[i, i]
     return u
 
 def norm(x):
