@@ -11,6 +11,9 @@ def main():
     f = np.zeros(n)
     for i in range(n):
         f[i] = sum([A[i, j] for j in range(n)])
+    if check(A) == False:
+        print("Матрица несимметрична или не является положительно определённой!")
+        return
     global_solve(A, f)
 
 def global_solve(A, f):
@@ -28,6 +31,15 @@ def global_solve(A, f):
     print()
     print("Третья (Евклидова) норма разницы решений:")
     print(norm(x - x_np))
+
+def check(A):
+    if np.array_equal(A, np.transpose(A)) == False:
+        return False
+    l = np.linalg.eigvals(A)
+    for i in l:
+        if i <= 0:
+            return False
+    return True
 
 def LL(A):
     n = len(A)
