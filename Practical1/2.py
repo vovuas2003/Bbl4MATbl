@@ -6,10 +6,10 @@ import math
 def main():
     n = 6
     A = np.zeros((n, n))
-    tay = 1
-    eps = 10**-6
+    tay = 0.4
+    eps = 10**-4
     for i in range(n):
-        A[i, i] = 2 + (1 / (n**2))
+        A[i, i] = 2 + (i / n)**2
     for i in range(1, n):
         A[i, i - 1] = -1
     for i in range(n - 1):
@@ -24,29 +24,20 @@ def main():
 def global_solve(A, f, tay, eps):
     zoom = False
     textx = False
-    printx = False
+    printx = True
     textn = False
-    printn = False
-    printxr = False
+    printn = True
+    printxr = True
     xc = 4.2
     yc = 0.37
     xn = 2.5
     yn = 0.45
     xr = np.linalg.solve(A, f)
-    if printxr:
-        print("xr = ", end = '')
-        print(xr)
-        print()
+    Printxr(printxr, xr)
     x, y = solve(A, f, tay, eps)
     n = norm(x - xr)
-    if printx:
-        print("x = ", end = '')
-        print(x)
-        print()
-    if printn:
-        print("norm = ", end = '')
-        print(n)
-        print()
+    Printx(printx, x)
+    Printn(printn, n)
     plt.figure(figsize = (13.5, 6.3))
     plt.subplot(1, 3, 1)
     plt.plot([int(i + 1) for i in range(len(y))], y)
@@ -61,14 +52,8 @@ def global_solve(A, f, tay, eps):
     tay = Gersh_Kr(A)
     x, y = solve(A, f, tay, eps)
     n = norm(x - xr)
-    if printx:
-        print("x = ", end = '')
-        print(x)
-        print()
-    if printn:
-        print("norm = ", end = '')
-        print(n)
-        print()
+    Printx(printx, x)
+    Printn(printn, n)
     plt.subplot(1, 3, 2)
     plt.plot([int(i + 1) for i in range(len(y))], y)
     if textx:
@@ -82,14 +67,8 @@ def global_solve(A, f, tay, eps):
     tay = by_numpy(A)
     x, y = solve(A, f, tay, eps)
     n = norm(x - xr)
-    if printx:
-        print("x = ", end = '')
-        print(x)
-        print()
-    if printn:
-        print("norm = ", end = '')
-        print(n)
-        print()
+    Printx(printx, x)
+    Printn(printn, n)
     plt.subplot(1, 3, 3)
     plt.plot([int(i + 1) for i in range(len(y))], y)
     if textx:
@@ -150,12 +129,18 @@ def Gersh_Kr(A):
         for j in range(n):
             B[j, i] = c[j]
     f = np.dot(A, c)
-    l, _ = np.linalg.eig(A)
-    print(sorted(l))
+    #l, _ = np.linalg.eig(A)
+    #print(sorted(l))
     c = np.linalg.solve(B, f)
     c = [-1] + [x for x in c]
-    print(sorted(np.roots(c)))
+    #print(sorted(np.roots(c)))
     return 1
+
+def polynom(c, x):
+    p = 0
+    for i in c:
+        p = p * x + i
+    return p
 
 def by_numpy(A):
     l, _ = np.linalg.eig(A)
@@ -164,6 +149,24 @@ def by_numpy(A):
 
 def norm(x):
     return math.sqrt(sum([abs(i)**2 for i in x]))
+
+def Printxr(f, xr):
+    if f:
+        print("xr = ", end = '')
+        print(xr)
+        print()
+
+def Printx(f, x):
+    if f:
+        print("x = ", end = '')
+        print(x)
+        print()
+
+def Printn(f, n):
+    if f:
+        print("norm = ", end = '')
+        print(n)
+        print()
 
 if __name__ == "__main__":
     main()
