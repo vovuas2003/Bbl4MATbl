@@ -11,13 +11,14 @@ def main():
     b = 1
     x = np.linspace(a, b, 10**3)
     y = [f(i) for i in x]
+    yr = np.asarray(y)
     plt.figure(figsize = (13.5, 6.3))
     plt.subplot(1, 3, 1)
     plt.title("Исходный график")
     plt.plot(x, y)
     plt.tight_layout()
     plt.grid()
-    N = [4, 6, 10]
+    N = [4, 6, 10, 20]
     plt.subplot(1, 3, 2)
     plt.title("Узлы равномерно")
     plt.tight_layout()
@@ -25,9 +26,12 @@ def main():
     for n in N:
         x1 = np.linspace(a, b, n)
         y1 = [f(i) for i in x1]
-        y = [Lagr(x1, y1, i) for i in x]
+        y = np.asarray([Lagr(x1, y1, i) for i in x])
+        print(n, end = ' ')
+        print(max(abs(y - yr)))
         plt.plot(x, y)
         plt.scatter(x1, y1)
+    print()
     plt.subplot(1, 3, 3)
     plt.title("Узлы - нули полинома Чебышева")
     plt.tight_layout()
@@ -36,7 +40,9 @@ def main():
         x1 = cheb(a, b, n)
         y1 = [f(i) for i in x1]
         F = diff(x1, y1)
-        y = [Newt(x1, F, i) for i in x]
+        y = np.asarray([Newt(x1, F, i) for i in x])
+        print(n, end = ' ')
+        print(max(abs(y - yr)))
         plt.plot(x, y)
         plt.scatter(x1, y1)
     plt.show()
