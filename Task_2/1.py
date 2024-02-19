@@ -30,10 +30,36 @@ def main():
     for i in range(n - 1):
         x.append(Runge(t[i], x[-1], h, f, A, B, C))
     y = [x[i][0] for i in range(n)]
-    plt.figure()
+    a = []
+    b = []
+    left = -2.5
+    right = 2.5
+    step = 0.01
+    c = np.arange(left, right + step, step)
+    ii = 1j
+    for i in c:
+        for j in c:
+            if i > step:
+                continue
+            if abs(R(i + j * ii, A, B)) <= 1:
+                a.append(i)
+                b.append(j)
+    plt.figure(figsize = (13.5, 6.3))
+    plt.suptitle("Метод абсолютно устойчив, но не А- и не L-устойчив")
+    plt.subplot(1, 2, 1)
     plt.plot(t, y)
+    plt.title("Решение уравнения")
     plt.xlabel("t")
     plt.ylabel("u(t)")
+    plt.tight_layout()
+    plt.grid()
+    plt.subplot(1, 2, 2)
+    plt.scatter(a, b)
+    plt.title("Область абсолютной устойчивости")
+    plt.xlim(left, right)
+    plt.ylim(left, right)
+    plt.xlabel("Re(z)")
+    plt.ylabel("Im(z)")
     plt.tight_layout()
     plt.grid()
     plt.show()
@@ -76,6 +102,15 @@ def MPI(f, x, c, h, u, a, n, s):
             for j in range(n):
                 k[j][i] = F[j]
     return k
+
+def R(z, a, b):
+    n = len(b)
+    a = np.array(a).reshape(n, n)
+    b = np.array(b).reshape(1, n)
+    e = np.eye(n)
+    x = np.linalg.det(e - z * a + z * (np.array([1, 1]).reshape(n, 1) * b))
+    y = np.linalg.det(e - z * a)
+    return x / y
 
 if __name__ == "__main__":
     main()
